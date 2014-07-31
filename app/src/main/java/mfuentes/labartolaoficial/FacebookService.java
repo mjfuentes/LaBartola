@@ -34,7 +34,7 @@ public class FacebookService extends AsyncTask {
         try {
             ArrayList<FBImage> images = new ArrayList<FBImage>();
             context = (Home.FotosFragment)params[0];
-            String uri = "https://graph.facebook.com/242629215867146/photos?fields=images&limit=400";
+            String uri = "https://graph.facebook.com/242629215867146/photos?limit=400";
             HttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(uri);
             HttpResponse response = client.execute(get);
@@ -48,13 +48,15 @@ public class FacebookService extends AsyncTask {
             JSONArray data = obj.getJSONArray("data");
             for (int i = 0;i<data.length();i++)
             {
-                images.add(new FBImage(data.getJSONObject(i).getString("source"),data.getJSONObject(i).getString("link")));
+                images.add(new FBImage(data.getJSONObject(i).getString("picture"), data.getJSONObject(i).getString("source")));
             }
             return images.toArray(new FBImage[images.size()]);
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
         return null;

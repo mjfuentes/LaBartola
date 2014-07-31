@@ -15,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -66,8 +68,10 @@ public class Home extends Activity implements ActionBar.TabListener {
                             .setTabListener(this));
         }
 
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .defaultDisplayImageOptions(options).build();
         ImageLoader.getInstance().init(config);
 
 
@@ -183,10 +187,11 @@ public class Home extends Activity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
+            View rootView = inflater.inflate(R.layout.fragment_images, container, false);
+            FacebookService service = new FacebookService();
+            service.execute(FotosFragment.this);
             adapter = new ImagesAdapter(getActivity());
-
+            ((GridView)rootView.findViewById(R.id.gridview)).setAdapter(adapter);
             return rootView;
         }
     }
