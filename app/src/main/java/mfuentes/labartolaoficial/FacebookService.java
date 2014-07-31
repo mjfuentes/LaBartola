@@ -1,7 +1,6 @@
 package mfuentes.labartolaoficial;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
@@ -17,9 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-/**
- * Created by matifuentes on 7/29/14.
- */
+import mfuentes.labartolaoficial.Activity.Home;
+
 public class FacebookService extends AsyncTask {
 
     private Fragment context;

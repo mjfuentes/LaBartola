@@ -1,6 +1,7 @@
 package mfuentes.labartolaoficial.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,14 +48,24 @@ public class ImagesAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int i, View v, ViewGroup viewGroup) {
+    public View getView(final int i, View v, ViewGroup viewGroup) {
         if (images != null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             RelativeLayout view = (RelativeLayout) inflater.inflate(context.getResources().getLayout(R.layout.image_layout), null);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent viewImage = new Intent(context,ImageView.class);
+                    viewImage.putExtra("currentImage",((FBImage)getItem(i)).getShareLink());
+                    context.startActivity(viewImage);
+                }
 
+
+
+            });
             final ImageView imageView = (ImageView) view.findViewById(R.id.image);
             final ProgressBar bar = (ProgressBar) view.findViewById(R.id.progressBar);
-            ImageLoader.getInstance().loadImage(images[i].uri, new SimpleImageLoadingListener() {
+            ImageLoader.getInstance().loadImage(images[i].getUri(), new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     imageView.setImageBitmap(loadedImage);
