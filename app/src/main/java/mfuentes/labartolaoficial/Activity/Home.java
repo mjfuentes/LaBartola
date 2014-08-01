@@ -16,16 +16,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.TextView;
+import android.widget.ListView;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeThumbnailLoader;
+import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import mfuentes.labartolaoficial.Adapters.ImagesAdapter;
+import mfuentes.labartolaoficial.Adapters.YoutubeVideosAdapter;
 import mfuentes.labartolaoficial.FBImage;
 import mfuentes.labartolaoficial.FacebookService;
 import mfuentes.labartolaoficial.R;
+import mfuentes.labartolaoficial.util.YoutubeService;
 
 
 public class Home extends Activity implements ActionBar.TabListener {
@@ -39,18 +44,18 @@ public class Home extends Activity implements ActionBar.TabListener {
         setContentView(R.layout.activity_home);
 
         final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
+//        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                actionBar.setSelectedNavigationItem(position);
+//            }
+//        });
 
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             actionBar.addTab(
@@ -152,7 +157,7 @@ public class Home extends Activity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+            View rootView = inflater.inflate(R.layout.video_layout, container, false);
             return rootView;
         }
     }
@@ -167,8 +172,8 @@ public class Home extends Activity implements ActionBar.TabListener {
             return fragment;
         }
 
-        public void setImages(FBImage[] images){
-            adapter.setImages(images);
+        public void addImage(FBImage image){
+            adapter.getImages().add(image);
             adapter.notifyDataSetChanged();
         }
 
@@ -184,6 +189,7 @@ public class Home extends Activity implements ActionBar.TabListener {
             adapter = new ImagesAdapter(getActivity());
             ((GridView)rootView.findViewById(R.id.gridview)).setAdapter(adapter);
             return rootView;
+
         }
     }
 
@@ -203,7 +209,11 @@ public class Home extends Activity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
+            YoutubeService youtubeService = new YoutubeService();
+            youtubeService.execute("http://gdata.youtube.com/feeds/api/playlists/PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz?v=2&alt=json");
+            YoutubeVideosAdapter adapter = new YoutubeVideosAdapter(this.getActivity());
+            ((ListView) rootView.findViewById(R.id.videosList)).setAdapter(adapter);
             return rootView;
         }
     }

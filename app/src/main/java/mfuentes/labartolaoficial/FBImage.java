@@ -1,30 +1,39 @@
 package mfuentes.labartolaoficial;
 
-/**
- * Created by matifuentes on 7/29/14.
- */
 public class FBImage {
-    private String uri;
-    private String shareLink;
-    public FBImage(String u,String s)
+    private String icon;
+    private String source;
+    private String name;
+
+
+    public FBImage(String icon,String source,String name)
     {
-        setUri(u);
-        setShareLink(s);
+        this.icon = icon;
+        this.setSource(source);
+        this.setName(name);
     }
 
-    public String getUri() {
-        return uri;
+    public String getName() {
+        return name;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getShareLink() {
-        return shareLink;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setShareLink(String shareLink) {
-        this.shareLink = shareLink;
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

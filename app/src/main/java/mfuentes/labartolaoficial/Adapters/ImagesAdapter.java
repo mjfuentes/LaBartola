@@ -14,12 +14,16 @@ import android.widget.RelativeLayout;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import mfuentes.labartolaoficial.Activity.BigImageView;
 import mfuentes.labartolaoficial.FBImage;
 import mfuentes.labartolaoficial.R;
 
 public class ImagesAdapter extends BaseAdapter{
 
-    private FBImage[] images;
+    private List<FBImage> images;
     private Context context;
 
     public ImagesAdapter(Context c){
@@ -29,7 +33,7 @@ public class ImagesAdapter extends BaseAdapter{
     @Override
     public int getCount() {
         if (images != null) {
-            return images.length;
+            return images.size();
         }
         return 0;
     }
@@ -37,7 +41,7 @@ public class ImagesAdapter extends BaseAdapter{
     @Override
     public Object getItem(int i) {
         if (images != null) {
-            return images[i];
+            return images.get(i);
         }
         return null;
     }
@@ -55,8 +59,9 @@ public class ImagesAdapter extends BaseAdapter{
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent viewImage = new Intent(context,ImageView.class);
-                    viewImage.putExtra("currentImage",((FBImage)getItem(i)).getShareLink());
+                    Intent viewImage = new Intent(context,BigImageView.class);
+                    viewImage.putExtra("currentImage",((FBImage)getItem(i)).getSource());
+                    viewImage.putExtra("imageName",((FBImage) getItem(i)).getName());
                     context.startActivity(viewImage);
                 }
 
@@ -65,7 +70,7 @@ public class ImagesAdapter extends BaseAdapter{
             });
             final ImageView imageView = (ImageView) view.findViewById(R.id.image);
             final ProgressBar bar = (ProgressBar) view.findViewById(R.id.progressBar);
-            ImageLoader.getInstance().loadImage(images[i].getUri(), new SimpleImageLoadingListener() {
+            ImageLoader.getInstance().loadImage(images.get(i).getIcon(), new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     imageView.setImageBitmap(loadedImage);
@@ -77,7 +82,11 @@ public class ImagesAdapter extends BaseAdapter{
         return null;
     }
 
-    public void setImages(FBImage[] images){
-        this.images = images;
+    public List<FBImage> getImages(){
+        if (this.images==null){
+            this.images = new ArrayList<FBImage>();
+        }
+        return this.images;
     }
+
 }

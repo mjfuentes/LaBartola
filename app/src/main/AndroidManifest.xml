@@ -27,7 +27,8 @@
         </activity>
         <activity
             android:name=".Activity.BigImageView"
-            android:label="@string/title_activity_image_view" >
+            android:label="@string/title_activity_image_view"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
         </activity>
     </application>
 
