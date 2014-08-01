@@ -1,23 +1,25 @@
 package mfuentes.labartolaoficial.Adapters;
 
-import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeThumbnailLoader;
-import com.google.android.youtube.player.YouTubeThumbnailView;
+import com.google.android.youtube.player.YouTubeIntents;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import mfuentes.labartolaoficial.R;
-import mfuentes.labartolaoficial.YoutubeVideo;
+import mfuentes.labartolaoficial.Model.YoutubeVideo;
 
 public class YoutubeVideosAdapter extends BaseAdapter {
 
@@ -31,12 +33,12 @@ public class YoutubeVideosAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return videos.size();
+        return getVideos().size();
     }
 
     @Override
     public Object getItem(int i) {
-        return videos.get(i);
+        return getVideos().get(i);
     }
 
     @Override
@@ -48,20 +50,30 @@ public class YoutubeVideosAdapter extends BaseAdapter {
     public View getView(final int i, View v, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final RelativeLayout view = (RelativeLayout) inflater.inflate(context.getResources().getLayout(R.layout.video_layout), null);
-        YouTubeThumbnailView youtubeView = (YouTubeThumbnailView) view.findViewById(R.id.youtube_view);
-        final TextView text = (TextView) view.findViewById(R.id.videoTitle);
-        youtubeView.initialize(YOUTUBE_API_KEY,new YouTubeThumbnailView.OnInitializedListener() {
+        final ImageView image = (ImageView) view.findViewById(R.id.video_thumbnail);
+        final TextView text = (TextView) view.findViewById(R.id.video_title);
+        ImageLoader.getInstance().loadImage(videos.get(i).getImage(), new SimpleImageLoadingListener() {
             @Override
-            public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                youTubeThumbnailLoader.setVideo(videos.get(i).getToken());
+            public void onLoadingComplete(String imageUri, View v, Bitmap loadedImage) {
+                image.setImageBitmap(loadedImage);
                 text.setText(videos.get(i).getDescription());
-            }
-
-            @Override
-            public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = YouTubeIntents.createPlayVideoIntent(context,videos.get(i).getLink());
+                        context.startActivity(intent);
+                    }
+                });
             }
         });
         return view;
+    }
+
+    public List<YoutubeVideo> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<YoutubeVideo> videos) {
+        this.videos = videos;
     }
 }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mfuentes.labartolaoficial.Activity.BigImageView;
-import mfuentes.labartolaoficial.FBImage;
+import mfuentes.labartolaoficial.Model.FBImage;
 import mfuentes.labartolaoficial.R;
 
 public class ImagesAdapter extends BaseAdapter{

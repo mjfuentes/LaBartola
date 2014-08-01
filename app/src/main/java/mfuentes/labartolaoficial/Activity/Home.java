@@ -7,6 +7,9 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -18,19 +21,17 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeThumbnailLoader;
-import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import mfuentes.labartolaoficial.Adapters.ImagesAdapter;
 import mfuentes.labartolaoficial.Adapters.YoutubeVideosAdapter;
-import mfuentes.labartolaoficial.FBImage;
-import mfuentes.labartolaoficial.FacebookService;
+import mfuentes.labartolaoficial.Model.FBImage;
+import mfuentes.labartolaoficial.Service.FacebookService;
 import mfuentes.labartolaoficial.R;
-import mfuentes.labartolaoficial.util.YoutubeService;
+import mfuentes.labartolaoficial.Model.YoutubeVideo;
+import mfuentes.labartolaoficial.Service.YoutubeService;
 
 
 public class Home extends Activity implements ActionBar.TabListener {
@@ -42,13 +43,11 @@ public class Home extends Activity implements ActionBar.TabListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         final ActionBar actionBar = getActionBar();
         //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
-
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 //        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 //            @Override
@@ -71,6 +70,31 @@ public class Home extends Activity implements ActionBar.TabListener {
         ImageLoader.getInstance().init(config);
 
 
+    }
+
+    public void goTwitter(MenuItem item){
+        try
+        {
+            getPackageManager().getPackageInfo("com.twitter.android", 0);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setClassName("com.twitter.android", "com.twitter.android.ProfileActivity");
+            intent.putExtra("user_id", 977331320L);
+            startActivity(intent);
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/labartolaLB")));
+        }
+    }
+
+    public void goFacebook(MenuItem item){
+        try {
+            getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/235834106546657"));
+            startActivity(intent);
+        } catch (Exception e) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/LaBartolaOficial")));
+        }
     }
 
 
@@ -196,6 +220,7 @@ public class Home extends Activity implements ActionBar.TabListener {
 
 
     public static class VideosFragment extends Fragment {
+        private YoutubeVideosAdapter adapter;
         public static VideosFragment newInstance() {
             VideosFragment fragment = new VideosFragment();
             Bundle args = new Bundle();
@@ -211,10 +236,15 @@ public class Home extends Activity implements ActionBar.TabListener {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
             YoutubeService youtubeService = new YoutubeService();
-            youtubeService.execute("http://gdata.youtube.com/feeds/api/playlists/PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz?v=2&alt=json");
-            YoutubeVideosAdapter adapter = new YoutubeVideosAdapter(this.getActivity());
+            youtubeService.execute("http://gdata.youtube.com/feeds/api/playlists/PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz?v=2&alt=json", VideosFragment.this);
+            adapter = new YoutubeVideosAdapter(this.getActivity());
             ((ListView) rootView.findViewById(R.id.videosList)).setAdapter(adapter);
             return rootView;
+        }
+
+        public void addVideo(YoutubeVideo video){
+            adapter.getVideos().add(video);
+            adapter.notifyDataSetChanged();
         }
     }
 
