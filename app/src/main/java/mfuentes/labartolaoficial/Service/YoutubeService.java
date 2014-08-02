@@ -1,7 +1,6 @@
 package mfuentes.labartolaoficial.Service;
 
 
-import android.app.Fragment;
 import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
@@ -17,17 +16,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import mfuentes.labartolaoficial.Activity.Home;
+import mfuentes.labartolaoficial.Controller.YoutubeController;
 import mfuentes.labartolaoficial.Model.YoutubeVideo;
 
 public class YoutubeService extends AsyncTask {
-    private Fragment context;
     private String uri;
     @Override
     protected Object doInBackground(Object[] objects) {
         try {
-            context = (Fragment) objects[1];
-            uri = (String) objects[0];
+            uri = "http://gdata.youtube.com/feeds/api/playlists/PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz?v=2&alt=json";
             HttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(uri);
             HttpResponse response = client.execute(get);
@@ -60,6 +57,6 @@ public class YoutubeService extends AsyncTask {
 
     @Override
     protected void onProgressUpdate(Object[] values) {
-        ((Home.VideosFragment)context).addVideo((YoutubeVideo) values[0]);
+        YoutubeController.getInstance().addVideo((YoutubeVideo) values[0]);
     }
 }

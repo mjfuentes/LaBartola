@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,18 +18,21 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
+import mfuentes.labartolaoficial.Controller.YoutubeController;
 import mfuentes.labartolaoficial.R;
 import mfuentes.labartolaoficial.Model.YoutubeVideo;
 
-public class YoutubeVideosAdapter extends BaseAdapter {
+public class YoutubeVideosAdapter extends BaseAdapter implements Observer {
 
-    private List<YoutubeVideo> videos = new ArrayList<YoutubeVideo>();
     private Context context;
     public static String YOUTUBE_API_KEY = "AIzaSyDIAtyq-wtY1CiCv-tquxQb0fM2qbxZbIs";
 
     public YoutubeVideosAdapter(Context context){
         this.context = context;
+        YoutubeController.getInstance().addObserver(this);
     }
 
     @Override
@@ -48,32 +52,47 @@ public class YoutubeVideosAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View v, ViewGroup viewGroup) {
+        final YoutubeVideo item = getVideos().get(i);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final RelativeLayout view = (RelativeLayout) inflater.inflate(context.getResources().getLayout(R.layout.video_layout), null);
+        final FrameLayout view = (FrameLayout) inflater.inflate(context.getResources().getLayout(R.layout.youtube_video_list_item), null);
         final ImageView image = (ImageView) view.findViewById(R.id.video_thumbnail);
         final TextView text = (TextView) view.findViewById(R.id.video_title);
-        ImageLoader.getInstance().loadImage(videos.get(i).getImage(), new SimpleImageLoadingListener() {
+        final ImageView share = (ImageView) view.findViewById(R.id.video_share);
+        text.setText(item.getDescription());
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = YouTubeIntents.createPlayVideoIntent(context,item.getLink());
+                context.startActivity(intent);
+            }
+        });
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Watch \"" + item.getDescription() + "\" on YouTube");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, item.getLink());
+                sendIntent.setType("text/plain");
+                context.startActivity(sendIntent);
+            }
+        });
+        ImageLoader.getInstance().loadImage(item.getImage(), new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View v, Bitmap loadedImage) {
                 image.setImageBitmap(loadedImage);
-                text.setText(videos.get(i).getDescription());
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = YouTubeIntents.createPlayVideoIntent(context,videos.get(i).getLink());
-                        context.startActivity(intent);
-                    }
-                });
+
             }
         });
         return view;
     }
 
     public List<YoutubeVideo> getVideos() {
-        return videos;
+        return YoutubeController.getInstance().getVideos();
     }
 
-    public void setVideos(List<YoutubeVideo> videos) {
-        this.videos = videos;
+    @Override
+    public void update(Observable observable, Object o) {
+        this.notifyDataSetChanged();
     }
 }

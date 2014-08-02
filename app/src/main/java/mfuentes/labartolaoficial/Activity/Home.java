@@ -1,6 +1,8 @@
 package mfuentes.labartolaoficial.Activity;
 
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -27,8 +29,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import mfuentes.labartolaoficial.Adapters.ImagesAdapter;
 import mfuentes.labartolaoficial.Adapters.YoutubeVideosAdapter;
+import mfuentes.labartolaoficial.Controller.YoutubeController;
 import mfuentes.labartolaoficial.Model.FBImage;
-import mfuentes.labartolaoficial.Service.FacebookService;
+import mfuentes.labartolaoficial.Service.ImageService;
 import mfuentes.labartolaoficial.R;
 import mfuentes.labartolaoficial.Model.YoutubeVideo;
 import mfuentes.labartolaoficial.Service.YoutubeService;
@@ -196,11 +199,6 @@ public class Home extends Activity implements ActionBar.TabListener {
             return fragment;
         }
 
-        public void addImage(FBImage image){
-            adapter.getImages().add(image);
-            adapter.notifyDataSetChanged();
-        }
-
         public FotosFragment() {
         }
 
@@ -208,7 +206,7 @@ public class Home extends Activity implements ActionBar.TabListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_images, container, false);
-            FacebookService service = new FacebookService();
+            ImageService service = new ImageService();
             service.execute(FotosFragment.this);
             adapter = new ImagesAdapter(getActivity());
             ((GridView)rootView.findViewById(R.id.gridview)).setAdapter(adapter);
@@ -219,7 +217,7 @@ public class Home extends Activity implements ActionBar.TabListener {
 
 
 
-    public static class VideosFragment extends Fragment {
+    public static class VideosFragment extends Fragment implements Observer {
         private YoutubeVideosAdapter adapter;
         public static VideosFragment newInstance() {
             VideosFragment fragment = new VideosFragment();
@@ -235,15 +233,13 @@ public class Home extends Activity implements ActionBar.TabListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_videos, container, false);
-            YoutubeService youtubeService = new YoutubeService();
-            youtubeService.execute("http://gdata.youtube.com/feeds/api/playlists/PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz?v=2&alt=json", VideosFragment.this);
             adapter = new YoutubeVideosAdapter(this.getActivity());
             ((ListView) rootView.findViewById(R.id.videosList)).setAdapter(adapter);
             return rootView;
         }
 
-        public void addVideo(YoutubeVideo video){
-            adapter.getVideos().add(video);
+        @Override
+        public void update(Observable observable, Object o) {
             adapter.notifyDataSetChanged();
         }
     }

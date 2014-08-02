@@ -16,34 +16,31 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import mfuentes.labartolaoficial.Activity.BigImageView;
+import mfuentes.labartolaoficial.Controller.ImageController;
 import mfuentes.labartolaoficial.Model.FBImage;
 import mfuentes.labartolaoficial.R;
 
-public class ImagesAdapter extends BaseAdapter{
+public class ImagesAdapter extends BaseAdapter implements Observer {
 
-    private List<FBImage> images;
     private Context context;
 
     public ImagesAdapter(Context c){
         context = c;
+        ImageController.getInstance().addObserver(this);
     }
 
     @Override
     public int getCount() {
-        if (images != null) {
-            return images.size();
-        }
-        return 0;
+        return getImages().size();
     }
 
     @Override
     public Object getItem(int i) {
-        if (images != null) {
-            return images.get(i);
-        }
-        return null;
+        return getImages().get(i);
     }
 
     @Override
@@ -53,40 +50,36 @@ public class ImagesAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int i, View v, ViewGroup viewGroup) {
-        if (images != null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            RelativeLayout view = (RelativeLayout) inflater.inflate(context.getResources().getLayout(R.layout.image_layout), null);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent viewImage = new Intent(context,BigImageView.class);
-                    viewImage.putExtra("currentImage",((FBImage)getItem(i)).getSource());
-                    viewImage.putExtra("imageName",((FBImage) getItem(i)).getName());
-                    context.startActivity(viewImage);
-                }
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        RelativeLayout view = (RelativeLayout) inflater.inflate(context.getResources().getLayout(R.layout.image_layout), null);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent viewImage = new Intent(context,BigImageView.class);
+                viewImage.putExtra("currentImage",((FBImage)getItem(i)).getSource());
+                viewImage.putExtra("imageName",((FBImage) getItem(i)).getName());
+                context.startActivity(viewImage);
+            }
 
 
 
-            });
-            final ImageView imageView = (ImageView) view.findViewById(R.id.image);
-            final ProgressBar bar = (ProgressBar) view.findViewById(R.id.progressBar);
-            ImageLoader.getInstance().loadImage(images.get(i).getIcon(), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    imageView.setImageBitmap(loadedImage);
-                    bar.setVisibility(View.INVISIBLE);
-                }
-            });
-            return view;
-        }
-        return null;
+        });
+        final ImageView imageView = (ImageView) view.findViewById(R.id.image);
+        ImageLoader.getInstance().loadImage(getImages().get(i).getIcon(), new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                imageView.setImageBitmap(loadedImage);
+            }
+        });
+        return view;
     }
 
     public List<FBImage> getImages(){
-        if (this.images==null){
-            this.images = new ArrayList<FBImage>();
-        }
-        return this.images;
+        return ImageController.getInstance().getImages();
     }
 
+    @Override
+    public void update(Observable observable, Object o) {
+        this.notifyDataSetChanged();
+    }
 }
