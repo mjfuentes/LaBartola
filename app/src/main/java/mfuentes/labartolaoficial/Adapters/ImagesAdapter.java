@@ -56,8 +56,7 @@ public class ImagesAdapter extends BaseAdapter implements Observer {
             @Override
             public void onClick(View view) {
                 Intent viewImage = new Intent(context,BigImageView.class);
-                viewImage.putExtra("currentImage",((FBImage)getItem(i)).getSource());
-                viewImage.putExtra("imageName",((FBImage) getItem(i)).getName());
+                viewImage.putExtra("currentImage",i);
                 context.startActivity(viewImage);
             }
 
