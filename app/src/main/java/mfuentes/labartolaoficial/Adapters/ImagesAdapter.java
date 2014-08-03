@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
@@ -64,7 +65,8 @@ public class ImagesAdapter extends BaseAdapter implements Observer {
 
         });
         final ImageView imageView = (ImageView) view.findViewById(R.id.image);
-        ImageLoader.getInstance().loadImage(getImages().get(i).getIcon(), new SimpleImageLoadingListener() {
+        DisplayImageOptions options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.no_image_small).cacheInMemory(true).cacheOnDisk(true).build();
+        ImageLoader.getInstance().loadImage(getImages().get(i).getIcon(),options, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 imageView.setImageBitmap(loadedImage);

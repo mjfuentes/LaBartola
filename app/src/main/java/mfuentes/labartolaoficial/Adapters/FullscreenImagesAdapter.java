@@ -2,7 +2,11 @@ package mfuentes.labartolaoficial.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -45,22 +54,66 @@ public class FullscreenImagesAdapter extends PagerAdapter implements Observer {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         final ImageView imgDisplay;
-
+        final FBImage image = getImages().get(position);
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.fullscreen_image, container,
                 false);
-        final ProgressBar loading = (ProgressBar) viewLayout.findViewById(R.id.progressBar);
         imgDisplay = (ImageView) viewLayout.findViewById(R.id.currentImage);
-        ImageLoader.getInstance().loadImage(getImages().get(position).getSource(), new SimpleImageLoadingListener() {
+        TextView title = (TextView) viewLayout.findViewById(R.id.name);
+        title.setText(image.getName());
+        ImageView save = (ImageView) viewLayout.findViewById(R.id.save);
+        ImageView share = (ImageView) viewLayout.findViewById(R.id.share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent share = new Intent(android.content.Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_SUBJECT, "Link");
+                share.putExtra(Intent.EXTRA_TEXT, image.getSource());
+                context.startActivity(Intent.createChooser(share, "Share Image"));
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    saveImage(((BitmapDrawable) imgDisplay.getDrawable()).getBitmap());
+                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+                }
+                catch (Exception e){
+
+                }
+            }
+        });
+        DisplayImageOptions options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.no_image).cacheInMemory(true).cacheOnDisk(true).build();
+        ImageLoader.getInstance().loadImage(image.getSource(),options, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 imgDisplay.setImageBitmap(loadedImage);
-                loading.setVisibility(View.GONE);
             }
         });
         container.addView(viewLayout);
         return viewLayout;
+    }
+
+    void saveImage(Bitmap image) {
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+
+        String fname = "Image.jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

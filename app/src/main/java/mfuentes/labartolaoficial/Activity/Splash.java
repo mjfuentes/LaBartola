@@ -11,7 +11,7 @@ import mfuentes.labartolaoficial.Service.YoutubeService;
 
 public class Splash extends Activity {
 
-    private final int SPLASH_DISPLAY_LENGHT = 2000;
+    private final int SPLASH_DISPLAY_LENGHT = 3000;
 
     @Override
     public void onCreate(Bundle icicle) {
