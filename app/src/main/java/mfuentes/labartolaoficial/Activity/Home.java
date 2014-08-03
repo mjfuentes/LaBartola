@@ -145,13 +145,15 @@ public class Home extends Activity implements ActionBar.TabListener {
                     return FotosFragment.newInstance();
                 case 2:
                     return VideosFragment.newInstance();
+                case 3:
+                    return InfoFragment.newInstance();
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -164,6 +166,8 @@ public class Home extends Activity implements ActionBar.TabListener {
                     return getString(R.string.Fotos).toUpperCase(l);
                 case 2:
                     return getString(R.string.Videos).toUpperCase(l);
+                case 3:
+                    return "INFO";
             }
             return null;
         }
@@ -242,6 +246,26 @@ public class Home extends Activity implements ActionBar.TabListener {
         public void update(Observable observable, Object o) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public static class InfoFragment extends Fragment {
+
+        public static InfoFragment newInstance() {
+            InfoFragment fragment = new InfoFragment();
+            return fragment;
+        }
+
+        public InfoFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_info, container, false);
+            return rootView;
+        }
+
+
     }
 
 

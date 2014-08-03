@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Observable;
@@ -82,7 +83,7 @@ public class FullscreenImagesAdapter extends PagerAdapter implements Observer {
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
                 }
                 catch (Exception e){
-
+                    e.printStackTrace();
                 }
             }
         });
@@ -97,23 +98,8 @@ public class FullscreenImagesAdapter extends PagerAdapter implements Observer {
         return viewLayout;
     }
 
-    void saveImage(Bitmap image) {
-
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/saved_images");
-
-        String fname = "Image.jpg";
-        File file = new File (myDir, fname);
-        if (file.exists ()) file.delete ();
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    void saveImage(Bitmap image) throws FileNotFoundException {
+        image.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(Environment.getExternalStorageDirectory() + "NameOfFile.jpg"));
     }
 
     @Override

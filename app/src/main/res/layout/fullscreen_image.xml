@@ -23,38 +23,36 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="10dp"
         android:layout_above="@+id/line"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="12dp" />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:background="#d4cdcbcf"
-        android:layout_above="@+id/share"
+        android:layout_above="@+id/save"
         android:id="@+id/line"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="12dp" />
 
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:id="@+id/share"
+        android:src="@drawable/share_new"
+        android:layout_toEndOf="@+id/save"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/share_white_small"
+        android:layout_toRightOf="@+id/save"
         android:layout_marginLeft="15dp"
-        android:layout_marginBottom="6dp" />
+        android:layout_marginBottom="17dp" />
 
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:id="@+id/save"
+        android:src="@drawable/download_new"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/share"
-        android:layout_toEndOf="@+id/share"
-        android:src="@drawable/download_small"
         android:layout_marginLeft="15dp"
-        android:layout_marginBottom="6dp" />
+        android:layout_marginBottom="13dp" />
 
 </RelativeLayout>
