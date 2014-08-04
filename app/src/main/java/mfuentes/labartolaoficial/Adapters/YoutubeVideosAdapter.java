@@ -72,7 +72,7 @@ public class YoutubeVideosAdapter extends BaseAdapter implements Observer {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Watch \"" + item.getDescription() + "\" on YouTube");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, item.getLink());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=" + item.getLink());
                 sendIntent.setType("text/plain");
                 context.startActivity(sendIntent);
             }

@@ -4,13 +4,15 @@ public class FBImage {
     private String icon;
     private String source;
     private String name;
+    private String link;
 
 
-    public FBImage(String icon,String source,String name)
+    public FBImage(String icon,String source,String name,String link)
     {
         this.icon = icon;
-        this.setSource(source);
-        this.setName(name);
+        this.source = source;
+        this.name = name;
+        this.link = link;
     }
 
     public String getName() {
@@ -35,5 +37,13 @@ public class FBImage {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

@@ -28,6 +28,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import mfuentes.labartolaoficial.Adapters.ImagesAdapter;
+import mfuentes.labartolaoficial.Adapters.NewsAdapter;
 import mfuentes.labartolaoficial.Adapters.YoutubeVideosAdapter;
 import mfuentes.labartolaoficial.Controller.YoutubeController;
 import mfuentes.labartolaoficial.Model.FBImage;
@@ -175,10 +176,10 @@ public class Home extends Activity implements ActionBar.TabListener {
 
 
     public static class NoticiasFragment extends Fragment {
+        private NewsAdapter adapter;
         public static NoticiasFragment newInstance() {
             NoticiasFragment fragment = new NoticiasFragment();
-            Bundle args = new Bundle();
-            fragment.setArguments(args);
+
             return fragment;
         }
 
@@ -188,7 +189,10 @@ public class Home extends Activity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.video_layout, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_news, container, false);
+            adapter = new NewsAdapter(this.getActivity());
+            ListView list = (ListView) rootView.findViewById(R.id.newsList);
+            list.setAdapter(adapter);
             return rootView;
         }
     }
@@ -210,8 +214,6 @@ public class Home extends Activity implements ActionBar.TabListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_images, container, false);
-            ImageService service = new ImageService();
-            service.execute(FotosFragment.this);
             adapter = new ImagesAdapter(getActivity());
             ((GridView)rootView.findViewById(R.id.gridview)).setAdapter(adapter);
             return rootView;

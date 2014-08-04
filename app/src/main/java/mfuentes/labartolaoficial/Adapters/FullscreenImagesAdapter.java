@@ -71,7 +71,7 @@ public class FullscreenImagesAdapter extends PagerAdapter implements Observer {
                 Intent share = new Intent(android.content.Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_SUBJECT, "Link");
-                share.putExtra(Intent.EXTRA_TEXT, image.getSource());
+                share.putExtra(Intent.EXTRA_TEXT, image.getLink());
                 context.startActivity(Intent.createChooser(share, "Share Image"));
             }
         });

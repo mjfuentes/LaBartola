@@ -16,14 +16,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import mfuentes.labartolaoficial.Activity.Splash;
 import mfuentes.labartolaoficial.Controller.YoutubeController;
 import mfuentes.labartolaoficial.Model.YoutubeVideo;
 
 public class YoutubeService extends AsyncTask {
     private String uri;
+    private Splash activity;
+
     @Override
     protected Object doInBackground(Object[] objects) {
         try {
+            activity = (Splash) objects[0];
             uri = "http://gdata.youtube.com/feeds/api/playlists/PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz?v=2&alt=json";
             HttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(uri);
@@ -59,4 +63,11 @@ public class YoutubeService extends AsyncTask {
     protected void onProgressUpdate(Object[] values) {
         YoutubeController.getInstance().addVideo((YoutubeVideo) values[0]);
     }
+
+
+    @Override
+    protected void onPostExecute(Object o) {
+        activity.finishedTask();
+    }
+
 }
