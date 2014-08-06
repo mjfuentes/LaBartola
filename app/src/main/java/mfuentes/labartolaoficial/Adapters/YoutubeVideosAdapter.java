@@ -77,13 +77,7 @@ public class YoutubeVideosAdapter extends BaseAdapter implements Observer {
                 context.startActivity(sendIntent);
             }
         });
-        ImageLoader.getInstance().loadImage(item.getImage(), new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View v, Bitmap loadedImage) {
-                image.setImageBitmap(loadedImage);
-
-            }
-        });
+        ImageLoader.getInstance().displayImage(item.getImage(),image);
         return view;
     }
 

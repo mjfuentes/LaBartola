@@ -87,13 +87,8 @@ public class FullscreenImagesAdapter extends PagerAdapter implements Observer {
                 }
             }
         });
-        DisplayImageOptions options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.no_image).cacheInMemory(true).cacheOnDisk(true).build();
-        ImageLoader.getInstance().loadImage(image.getSource(),options, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                imgDisplay.setImageBitmap(loadedImage);
-            }
-        });
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
+        ImageLoader.getInstance().displayImage(image.getSource(),imgDisplay,options);
         container.addView(viewLayout);
         return viewLayout;
     }

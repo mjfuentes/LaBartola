@@ -65,13 +65,8 @@ public class ImagesAdapter extends BaseAdapter implements Observer {
 
         });
         final ImageView imageView = (ImageView) view.findViewById(R.id.image);
-        DisplayImageOptions options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.no_image_small).cacheInMemory(true).cacheOnDisk(true).build();
-        ImageLoader.getInstance().loadImage(getImages().get(i).getIcon(),options, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                imageView.setImageBitmap(loadedImage);
-            }
-        });
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
+        ImageLoader.getInstance().displayImage(getImages().get(i).getIcon(),imageView,options);
         return view;
     }
 
