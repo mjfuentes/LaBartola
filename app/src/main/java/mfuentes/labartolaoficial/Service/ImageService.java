@@ -39,7 +39,7 @@ public class ImageService extends AsyncTask {
     protected Object doInBackground(Object[] params) {
         activity = (Splash) params[0];
         try {
-            String uri = "https://graph.facebook.com/242629215867146/photos?limit=400";
+            String uri = "https://graph.facebook.com/242629215867146/photos?limit=400&access_token=CAAEMOKPkIl0BAHUxt0bm5eiZCUbVWFZC1OWr9D4U6Amn5oyUueCCqjcC9z2ZB6YliS0uI0Ijp5Q9uEGSCzalDOqGuVaUHw8EjxQFIfzUWSThr1nA45lHefVo4kDbRcB3UzEoodfrdOZBRGlEFRr4PoWTaIEoDsDUNSVjYokRw0ZAJmZCtrQmV8RXxyr2YDjDsBQRYos52g99RnVUGE4dly&expires=5183988";
             while (uri!= null){
                 uri = this.getData(uri);
             }

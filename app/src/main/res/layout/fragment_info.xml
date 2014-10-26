@@ -44,7 +44,7 @@
         android:src="@drawable/splash_transparency"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Contacto"
+        android:text="Contrataciones"
         android:id="@+id/textView11"
         android:layout_toStartOf="@+id/imageView2"
         android:textSize="20dp"
@@ -170,7 +170,7 @@
         android:id="@+id/textView12"
         android:textColor="#ffebece3"
         android:fontFamily="sans-serif-light"
-        android:text="Seba: (0221) 605 5378"
+        android:text="0221 - 620 4320 / 0221 - 624 4052 "
         android:layout_below="@+id/textView11"
         android:layout_alignLeft="@+id/textView10"
         android:layout_alignStart="@+id/textView10"
@@ -182,11 +182,25 @@
         android:id="@+id/textView13"
         android:textColor="#ffebece3"
         android:fontFamily="sans-serif-light"
-        android:text="Agus (0221) 6204320"
+        android:text="labartola.contacto@gmail.com"
         android:layout_below="@+id/textView12"
-        android:layout_alignLeft="@+id/textView12"
-        android:layout_alignStart="@+id/textView12"
-        android:layout_marginTop="6dp" />
+        android:layout_alignRight="@+id/textView12"
+        android:layout_alignEnd="@+id/textView12"
+        android:layout_marginTop="6dp"
+        android:layout_alignLeft="@+id/textView11"
+        android:layout_alignStart="@+id/textView11"
+        android:layout_marginLeft="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView16"
+        android:textColor="#ffebece3"
+        android:fontFamily="sans-serif-light"
+        android:text="matiasj.fuentes@gmail.com"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -194,24 +208,9 @@
         android:id="@+id/textView14"
         android:textColor="#ffebece3"
         android:fontFamily="sans-serif-light"
-        android:text="Mati (0221) 624 4052 "
-        android:layout_below="@+id/textView13"
-        android:layout_alignLeft="@+id/textView13"
-        android:layout_alignStart="@+id/textView13"
-        android:layout_marginTop="6dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView16"
-        android:textColor="#ffebece3"
-        android:fontFamily="sans-serif"
-        android:text="labartola.contacto@gmail.com"
-        android:textStyle="italic"
-        android:layout_below="@+id/textView14"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp" />
+        android:text="Aplicacion desarrollada por Matias Fuentes"
+        android:layout_above="@+id/textView16"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
     </ScrollView>

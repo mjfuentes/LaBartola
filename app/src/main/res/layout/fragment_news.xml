@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="mfuentes.labartolaoficial.NewsFragment"
-    android:background="#ddd">
+    android:background="#ddd"
+    android:clickable="true">
 
     <ListView
         android:id="@+id/newsList"

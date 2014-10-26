@@ -2,6 +2,7 @@ package mfuentes.labartolaoficial.Adapters;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class NewsAdapter extends BaseAdapter{
         TextView description = (TextView) view.findViewById(R.id.feed_description);
 
         title.setText(NewsController.getInstance().getNews().get(i).getTitle());
+        description.setMovementMethod(LinkMovementMethod.getInstance());
         description.setText(Html.fromHtml(NewsController.getInstance().getNews().get(i).getDescription()));
 
         return view;

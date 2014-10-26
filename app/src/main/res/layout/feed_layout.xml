@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/feed_card"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -33,6 +34,7 @@
                 android:layout_gravity="center_vertical"
                 android:ellipsize="end"
                 android:textSize="18sp"
+                android:autoLink="web"
                 android:fontFamily="sans-serif-light" />
 
 
@@ -43,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:textColor="@android:color/secondary_text_light"

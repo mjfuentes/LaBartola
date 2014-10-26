@@ -8,13 +8,14 @@ android {
         applicationId "mfuentes.labartolaoficial"
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "1.3"
     }
     buildTypes {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlign true
         }
     }
 }
