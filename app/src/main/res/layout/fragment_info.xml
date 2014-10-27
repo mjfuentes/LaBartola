@@ -7,7 +7,7 @@
     android:id="@+id/scroll_info">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="fill_parent"
->
+    android:paddingBottom="10dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -198,9 +198,8 @@
         android:textColor="#ffebece3"
         android:fontFamily="sans-serif-light"
         android:text="matiasj.fuentes@gmail.com"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp" />
+        android:layout_below="@+id/textView14"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -209,8 +208,10 @@
         android:textColor="#ffebece3"
         android:fontFamily="sans-serif-light"
         android:text="Aplicacion desarrollada por Matias Fuentes"
-        android:layout_above="@+id/textView16"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/textView13"
+        android:layout_alignRight="@+id/textView9"
+        android:layout_alignEnd="@+id/textView9"
+        android:layout_marginTop="40dp" />
 
 </RelativeLayout>
     </ScrollView>
