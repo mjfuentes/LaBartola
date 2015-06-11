@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import mfuentes.labartolaoficial.Activity.Home;
@@ -39,7 +40,7 @@ public class ImageService extends AsyncTask {
     protected Object doInBackground(Object[] params) {
         activity = (Splash) params[0];
         try {
-            String uri = "https://graph.facebook.com/242629215867146/photos?limit=400&access_token=CAAEMOKPkIl0BAHUxt0bm5eiZCUbVWFZC1OWr9D4U6Amn5oyUueCCqjcC9z2ZB6YliS0uI0Ijp5Q9uEGSCzalDOqGuVaUHw8EjxQFIfzUWSThr1nA45lHefVo4kDbRcB3UzEoodfrdOZBRGlEFRr4PoWTaIEoDsDUNSVjYokRw0ZAJmZCtrQmV8RXxyr2YDjDsBQRYos52g99RnVUGE4dly&expires=5183988";
+            String uri = "https://graph.facebook.com/242629215867146/photos?limit=400&access_token=";
             while (uri!= null){
                 uri = this.getData(uri);
             }
@@ -55,15 +56,14 @@ public class ImageService extends AsyncTask {
 
     private String getData(String uri) throws IOException, JSONException {
         HttpClient client = new DefaultHttpClient();
-        HttpGet get = new HttpGet(uri);
-        HttpResponse response = client.execute(get);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        StringBuilder content = new StringBuilder();
-        String line;
-        while (null != (line = rd.readLine())) {
-            content.append(line);
-        }
-        JSONObject obj = new JSONObject(content.toString());
+        HttpGet authenticate = new HttpGet("https://graph.facebook.com/oauth/access_token?client_id=294912384049757&client_secret=848d1b24c0d2ebfcac902ccc58afac7b&grant_type=client_credentials");
+        HttpResponse authenticationResponse = client.execute(authenticate);
+        String token = responseParser(authenticationResponse).split("\\=")[1];
+        token = URLEncoder.encode(token, "UTF-8");
+        HttpClient client2 = new DefaultHttpClient();
+        HttpGet get = new HttpGet(uri + token);
+        HttpResponse response = client2.execute(get);
+        JSONObject obj = new JSONObject(responseParser(response));
         JSONArray data = obj.getJSONArray("data");
         for (int i = 0;i<data.length();i++)
         {
@@ -82,5 +82,15 @@ public class ImageService extends AsyncTask {
             return (obj.getJSONObject("paging")).getString("next");
         }
         return null;
+    }
+
+    private String responseParser(HttpResponse response) throws IOException {
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        StringBuilder content = new StringBuilder();
+        String line;
+        while (null != (line = rd.readLine())) {
+            content.append(line);
+        }
+        return content.toString();
     }
 }

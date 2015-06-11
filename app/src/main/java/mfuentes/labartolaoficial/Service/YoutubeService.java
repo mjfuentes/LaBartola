@@ -28,7 +28,7 @@ public class YoutubeService extends AsyncTask {
     protected Object doInBackground(Object[] objects) {
         try {
             activity = (Splash) objects[0];
-            uri = "http://gdata.youtube.com/feeds/api/playlists/PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz?v=2&alt=json";
+            uri = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLedPwWBpjt7xX3LXAXq7gSWmveyqZwLWz&key=AIzaSyD0CZnavoTPmO1KTUvWK42ik6O0zNA9RLo";
             HttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet(uri);
             HttpResponse response = client.execute(get);
@@ -39,12 +39,12 @@ public class YoutubeService extends AsyncTask {
                 content.append(line);
             }
             JSONObject obj = new JSONObject(content.toString());
-            JSONArray videos = obj.getJSONObject("feed").getJSONArray("entry");
+            JSONArray videos = obj.getJSONArray("items");
             for (int i=0;i<videos.length();i++){
                 //String id = videos.getJSONObject(i).getJSONObject("media$group").getJSONObject("yt$videoid").getString("$t");
-                String description = videos.getJSONObject(i).getJSONObject("title").getString("$t");
-                String link = videos.getJSONObject(i).getJSONObject("media$group").getJSONObject("yt$videoid").getString("$t");
-                String image = videos.getJSONObject(i).getJSONObject("media$group").getJSONArray("media$thumbnail").getJSONObject(1).getString("url");
+                String description = videos.getJSONObject(i).getJSONObject("snippet").getString("title");
+                String link = videos.getJSONObject(i).getJSONObject("snippet").getJSONObject("resourceId").getString("videoId");
+                String image = videos.getJSONObject(i).getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("medium").getString("url");
                 YoutubeVideo video = new YoutubeVideo(description,link,image);
                 this.publishProgress(video);
             }
